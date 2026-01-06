@@ -83,12 +83,14 @@ socket.on('move', (move) => {
 
 // Handle game over
 socket.on('gameOver', ({ winner }) => {
+    console.log("gameOver event received with winner:", winner);
     isGameOver = true;
     if (winner === 'Draw') {
         alert('The game is a draw!');
     } else {
         alert(`Checkmate! ${winner} wins!`);
     }
+    console.log("Alert shown for game over.");
 });
 
 // Reset the board

@@ -1,38 +1,33 @@
-const express = require('express')
-const http = require('http')
-const app = express()
+const express = require('express');
+const app = express();
 
-const server = http.createServer(app)
+app.get("/",(req,res)=>{
+    res.send("Hello WOrld");
+})
+app.get("/pagination",(req,res)=>{
 
-app.use(express.json())
+    const {page,limit} = req.query;
 
-app.get('/products',(req,res)=>{
-    try{
-    const product = Array.from({length:100},(_,i)=>({ id : i+1,name : `product ${i+1}`}))
-    const {page,limit} = req.query
-    if(!page || !limit) {
-        return res.status(400).send('Page and limit query parameters are required')
+
+    const pageNumber = parseInt(page) || 1;
+    const limitNumber  = parseInt(limit) || 5;
+    const p = (pageNumber - 1) * limitNumber;
+    const data = [];
+    for(let i=1;i<101;i++){
+        data.push({
+            "id":i,
+            "name" : `Item ${i}`,
+        })
     }
-    if(page > product.length){
-        res.status(404).send('Page not found')
-    }
-    const p = parseInt(page) || 1
-    const l = parseInt(limit) || 10
-    const stidx = (p-1) * l
-    const endidx = stidx + l
-    const result = product.slice(stidx,endidx)
-    res.json({
-        page:p,
-        limit:l,
-        total: product.length,
-        slicedData : result
+    return res.json({
+        page : pageNumber,
+        limit : limitNumber,
+        data : data.slice(p,p+limitNumber),
     })
-    } catch (error) {
-        console.error(error);
-    }
+
 })
 
 
-server.listen(3000,()=>{
-    console.log('http://localhost:3000')
-})
+app.listen(3000,()=>{
+    console.log("Server is running on port 3000");
+});

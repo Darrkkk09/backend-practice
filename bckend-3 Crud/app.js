@@ -22,6 +22,7 @@ app.get('/read',async (req,res)=>{
 })
 app.get('/delete',async (req,res)=>{
     const user = await mongo.findOneAndDelete({name: 'dark'});
+    res.send(user)
 })
 app.listen(3000,()=>{
     console.log('Server is running on port 3000');

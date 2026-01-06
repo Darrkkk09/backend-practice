@@ -52,9 +52,13 @@ io.on('connection', (uniqueSocket) => {
 
             if (chess.in_checkmate()) {
                 const winner = turn === 'w' ? 'Black' : 'White';
+                console.log("Checkmate detected. Winner:", winner);
                 io.emit("gameOver", { winner });
+                console.log("gameOver event emitted with winner:", winner);
             } else if (chess.in_draw()) {
+                console.log("Draw detected.");
                 io.emit("gameOver", { winner: "Draw" });
+                console.log("gameOver event emitted with draw.");
             }
         } catch (err) {
             console.error("Move error:", err);
@@ -74,6 +78,7 @@ io.on('connection', (uniqueSocket) => {
         }
         console.log("Player disconnected:", uniqueSocket.id);
     });
+    
 });
 
 server.listen(3000, () => {
